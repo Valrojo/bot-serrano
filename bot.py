@@ -8,6 +8,12 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+# Cargar librería Opus para soporte de voz
+for _opus_path in ['/usr/lib/libopus.so.0', '/usr/lib/x86_64-linux-gnu/libopus.so.0']:
+    if os.path.exists(_opus_path):
+        discord.opus.load_opus(_opus_path)
+        break
+
 intents = discord.Intents.default()
 intents.message_content = True
 intents.voice_states = True
@@ -59,7 +65,7 @@ async def process_song(ctx, search):
         'quiet': True,
         'default_search': 'ytsearch1',
         'noplaylist': True,
-        'source_address': '0.0.0.0'  # fuerza IPv4 para menos problemas
+        'source_address': '0.0.0.0',  # fuerza IPv4 para menos problemas
     }
     try:
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
@@ -125,7 +131,8 @@ async def add_to_queue(ctx, search, mode=""):
     ydl_opts = {
         'quiet': True,
         'extract_flat': 'in_playlist',
-        'skip_download': True
+        'skip_download': True,
+        'js_runtimes': 'nodejs',
     }
     try:
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:

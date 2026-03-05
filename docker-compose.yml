@@ -1,0 +1,13 @@
+services:
+  bot:
+    build: .
+    image: bot-serrano:latest
+    container_name: bot-serrano
+    env_file:
+      - .env
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
